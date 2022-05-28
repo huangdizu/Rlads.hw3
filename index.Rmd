@@ -1,8 +1,8 @@
 ---
-author: "未命名 B01203004 一般系"
+author: "黃柏勳 310708003 交大科管碩一"
 title: "HW 3: Base R (I)"
 date: |
-  | 2021-03-11
+  | 2022-05-28
   |
   | [Rmd Source (for TAs)](./index.Rmd){download='`r basename(getwd())`.Rmd'}
 output:
@@ -19,13 +19,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE,comment = '#>',error=TRUE, results = 'hold', out.width='65%', fig.align = 'center')
 ```
 
+# 基本題 (共 100 分)
 
-基本題 (共 100 分)
-=========================
-
-
-自訂函數 (15 分)
------------------------
+## 自訂函數 (15 分)
 
 已知 $$攝氏 = \frac{5}{9} \times (華氏 - 32)$$
 
@@ -34,7 +30,7 @@ knitr::opts_chunk$set(echo = TRUE,comment = '#>',error=TRUE, results = 'hold', o
 ```{r}
 c2f <- function(celsius) {
   # write your code here
-  fahrenheit = celsius
+  fahrenheit = 9/5 * celsius + 32
   return(fahrenheit)
 }
 # 請勿更動此行之下的程式碼
@@ -47,9 +43,7 @@ c2f(37.5)
 #> [1] 99.5
 ```
 
-
-Function Arguments (15 分)
----------------------------------
+## Function Arguments (15 分)
 
 ```{r}
 concat3 <- function(p1, p2, p3) {
@@ -65,41 +59,40 @@ concat3(p1 = 3, p2 = 2, p3 = 1)
 
 請修改下方程式碼，使 `concat3()` 可以印出 `"3 1 2"`。除此之外，請遵守下方的兩個限制：
 
-1. **請勿更動** Argument 的順序 (i.e., 第一個 Argument 是 `1`, 第二個是 `3`, 第三個是 `2`)
-2. 只能給予**其中一個** Argument 名稱，例如：
-   
-   ```r
-   # 不可給予兩個以上的 Argument 名稱，如： 
-   concat3(p1 = 1, p2 = 3, p3 = 2)
-   concat3(p1 = 1, p2 = 3, 2)
-   
-   # 合法的寫法：
-   concat3(1, 3, p1 = 2)
-   concat3(1, p3 = 3, 2)
-   ```
+1.  **請勿更動** Argument 的順序 (i.e., 第一個 Argument 是 `1`, 第二個是 `3`, 第三個是 `2`)
+
+2.  只能給予**其中一個** Argument 名稱，例如：
+
+    ``` r
+    # 不可給予兩個以上的 Argument 名稱，如： 
+    concat3(p1 = 1, p2 = 3, p3 = 2)
+    concat3(p1 = 1, p2 = 3, 2)
+
+    # 合法的寫法：
+    concat3(1, 3, p1 = 2)
+    concat3(1, p3 = 3, 2)
+    ```
 
 ```{r}
 # Modify the code below
-concat3(1, 3, 2)
+concat3(1, p1 = 3, 2)
 
 # should print out:
 #> [1] "3 1 2"
 ```
 
-
-Vector I (20 分)
--------------------
+## Vector I (20 分)
 
 ```{r}
 students <- c(1, 5, 4, 1, 4, 5, 1, 3, 2, 4, 5, 5, 3, 4, 2, 1, 5, 4, 2, 2, 1, 4, 3, 5, 2, 4, 1, 3, 3, 4, 3, 2, 1, 2, 2)
 ```
 
-上方的 `students` 儲存著 35 筆學生的年級 (1 至 5 年級) 資料。
-請計算出高年級 (4 & 5 年級) 學生的**人數**與**比例**：
+上方的 `students` 儲存著 35 筆學生的年級 (1 至 5 年級) 資料。 請計算出高年級 (4 & 5 年級) 學生的**人數**與**比例**：
 
 ```{r}
 # 高年級人數 (10 分)
 # Write your code here
+sum(students %in% c(4, 5))
 
 # Should print out
 #> [1] 14
@@ -108,25 +101,29 @@ students <- c(1, 5, 4, 1, 4, 5, 1, 3, 2, 4, 5, 5, 3, 4, 2, 1, 5, 4, 2, 2, 1, 4, 
 ```{r}
 # 高年級比例  (10 分)
 # Write your code here
+mean(students %in% c(4, 5))
 
 # Should print out
 #> [1] 0.4
 ```
 
-Vector II (20 分)
--------------------
+## Vector II (20 分)
 
 承上題，請修改 `students` 內的元素，將年級改以英文 (Freshman, Sophomore, Junior, Senior) 表達：
 
-- Freshman: 1 年級
-- Sophomore: 2 年級
-- Junior: 3 年級
-- Senior: 4 或 4 年級以上
+-   Freshman: 1 年級
+-   Sophomore: 2 年級
+-   Junior: 3 年級
+-   Senior: 4 或 4 年級以上
 
 ```{r}
 # Hint: 注意資料類型與 Coercion (可能會用到 as.character())
 # Write your code here
-
+students <- as.character(students)
+students[students == "1"] <- "Freshman"
+students[students == "2"] <- "Sophomore"
+students[students == "3"] <- "Junior"
+students[students %in% c("4", "5")] <- "Senior"
 
 # DO NOT modify the code below
 students
@@ -139,35 +136,36 @@ students
 #> [31] "Junior"    "Sophomore" "Freshman"  "Sophomore" "Sophomore"
 ```
 
-Write a Function (30 分)
--------------------------------
+## Write a Function (30 分)
 
 ```{r}
 # DO NOT Modify the code here
 students2 <- c(2, 2, 3, 1, 4, 3, 1, 4, 1, 3, 1, 2, 1, 4, 3, 1, 4, 4, 1, 3)
 ```
 
-
 此題與前面的 Vector I 一樣會用到學生的年級資料。與前面不同的是，`students2` 裡的年級只有 1 至 4 年級。
 
 在這題，同學需要撰寫一個函數 `grade_precentage()`，用來計算 `students2` 裡面各年級的比例。這個函數有兩個參數：
 
-- `grades`: 學生的年級。可以傳入一個或多個值，例如 `2`, `c(1, 2)` 或 `c("Freshman", "Junior")`。函數會回傳 `grades` 裡的年級所佔的學生比例。
-- `students`: 學生年級資料
+-   `grades`: 學生的年級。可以傳入一個或多個值，例如 `2`, `c(1, 2)` 或 `c("Freshman", "Junior")`。函數會回傳 `grades` 裡的年級所佔的學生比例。
+-   `students`: 學生年級資料
 
 這個函數特別的地方在於它能**容許不同資料類型的輸入**：不管使用者在 `grades` 裡輸入的是數值 (1 至 4) 或是英文 (Freshman, Sophomore, Junior, Senior)，它都能算出正確的年級比例資訊。
 
-(Hint: 這題可能會用到 `is.character()` 與 `as.character()` 。
-他們的功能分別是**確認資料類型是否為字串**以及**將其它資料類型轉換成字串**。詳見說明文件)
+(Hint: 這題可能會用到 `is.character()` 與 `as.character()` 。 他們的功能分別是**確認資料類型是否為字串**以及**將其它資料類型轉換成字串**。詳見說明文件)
 
 ```{r}
 grade_percentage <- function(grades, students) {
   # Modify the code below
-  if () {
-    
+  if (is.character(grades)) {
+    grades[grades == "Freshman"] <- 1
+    grades[grades == "Sophomore"] <- 2
+    grades[grades == "Junior"] <- 3
+    grades[grades == "Senior"] <- 4
   }
   
-  precentage <- mean()
+  students <- as.character(students)
+  precentage <- mean(students %in% grades)
   return(precentage)
 }
 
@@ -183,33 +181,40 @@ grade_percentage(grades = c("Junior", "Senior"), students = students2)
 #> [1] 0.5
 ```
 
-
-
-進階選答題 (共 20 分)
-==========================
+# 進階選答題 (共 20 分)
 
 我們假設一組有效的密碼必須符合以下條件：
 
-1. 長度大於 5 個字元
-2. 必須包含：
-   - 大寫英文字母
-   - 小寫英文字母
-   - 數字
-4. 不可以有空白
+1.  長度大於 5 個字元
+2.  必須包含：
+    -   大寫英文字母
+    -   小寫英文字母
+    -   數字
+3.  不可以有空白
 
 請同學針對以上條件，撰寫一個函數 `check_password()`，判斷傳入的字串是否為有效密碼。如果是有效密碼，請回傳 `Valid Password`；如果是無效密碼，請回傳 `INVALID`。除此之外，請遵守下方的限制：
 
-1. **不可以**使用 Regular expression (i.e., 不可使用 `grepl()` 或 Base R 以外的套件)
-2. **不可以**使用 for 迴圈以及 while 迴圈
+1.  **不可以**使用 Regular expression (i.e., 不可使用 `grepl()` 或 Base R 以外的套件)
+2.  **不可以**使用 for 迴圈以及 while 迴圈
 
 提示：
 
-1. 這題可能會用到 `strsplit()` 來將輸入的密碼拆成一個個字元，例如，將 `"abc123"` 變成 `"a" "b" "c" "1" "2" "3"`。注意：`strsplit()` 所回傳的資料結構是尚未教過的 `list`。
-2. 這題可能會用到邏輯運算子 `%in%` 以及布林運算子 `any()`
+1.  這題可能會用到 `strsplit()` 來將輸入的密碼拆成一個個字元，例如，將 `"abc123"` 變成 `"a" "b" "c" "1" "2" "3"`。注意：`strsplit()` 所回傳的資料結構是尚未教過的 `list`。
+2.  這題可能會用到邏輯運算子 `%in%` 以及布林運算子 `any()`
 
 ```{r}
 check_password <- function(pw){
   # Write your code here
+  pw <- strsplit(pw, "")[[1]]
+  numbers <- as.character(0:9)
+  
+  if(length(pw) <= 5){return("INVALID")}
+  if(!any(pw %in% LETTERS)){return("INVALID")}
+  if(!any(pw %in% letters)){return("INVALID")}
+  if(!any(pw %in% numbers)){return("INVALID")}
+  if(any(" " %in% pw)){return("INVALID")}
+  
+  return("Valid Password")
 }
 
 # DO NOT modify the code below
